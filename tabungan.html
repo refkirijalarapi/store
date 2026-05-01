@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catatan Tabungan Bareng Pasangan</title>
+    <style>
+        :root {
+            --pink-accent: #ff6b81;
+            --dark-text: #333;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --whatsapp-green: #25D366;
+            --gray-text: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.5;
+            padding-bottom: 80px;
+        }
+
+        /* Tombol Kembali (Fixed) */
+        .nav-header {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 500;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.9);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #ff7eb9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Slider Section */
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            background-color: var(--white);
+        }
+
+        .slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slider::-webkit-scrollbar { display: none; }
+
+        .slide {
+            flex: 0 0 100%;
+            width: 100%;
+            scroll-snap-align: start;
+            aspect-ratio: 1 / 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            cursor: pointer;
+            position: relative; /* Untuk ikon play */
+        }
+
+        /* Tombol Play Semu di Slider */
+        .slide-video::after {
+            content: '►';
+            position: absolute;
+            font-size: 3rem;
+            color: rgba(255,255,255,0.8);
+            background: rgba(0,0,0,0.5);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 10px; /* Adjust triangle pos */
+        }
+
+        .slide img, .slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--white);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Info Produk */
+        .product-meta {
+            background: var(--white);
+            padding: 15px 20px;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--pink-accent);
+            margin-bottom: 5px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            color: var(--dark-text);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        /* Description Section */
+        .description-wrapper {
+            background: var(--white);
+            padding: 20px;
+        }
+
+        .section-header {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--pink-accent);
+        }
+
+        .description-content {
+            font-size: 0.88rem;
+            color: var(--gray-text);
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        /* Buy Now Style (Fixed Bottom) */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--white);
+            padding: 12px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .buy-now-btn {
+            background-color: var(--whatsapp-green);
+            color: white;
+            text-decoration: none;
+            height: 48px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        /* --- LIGHTBOX (FULLSCREEN) --- */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .lightbox.show { display: flex; }
+        
+        /* Style untuk Foto Full */
+        .lightbox img { 
+            max-width: 95%; 
+            max-height: 90%; 
+            object-fit: contain; 
+            display: none; /* Sembunyi default */
+        }
+        
+        /* Style untuk Video Full */
+        .lightbox video {
+            max-width: 100%;
+            max-height: 100%;
+            display: none; /* Sembunyi default */
+        }
+
+        .close-btn { 
+            position: absolute; 
+            top: 20px; 
+            right: 25px; 
+            color: white; 
+            font-size: 3rem; 
+            cursor: pointer; 
+            z-index: 1010;
+            line-height: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="btn-back">✕</a>
+    </div>
+
+    <div class="slider-wrapper">
+        <div class="slider" id="mainSlider">
+            <div class="slide slide-video" onclick="viewFullVideo('tabungan.mp4')">
+                <video poster="foto1.jpg" preload="metadata">
+                    <source src="tabungan.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="slide" onclick="viewFullImg('foto1.jpg')"><img src="foto1.jpg"></div>
+            <div class="slide" onclick="viewFullImg('foto2.jpg')"><img src="foto2.jpg"></div>
+            <div class="slide" onclick="viewFullImg('foto3.jpg')"><img src="foto3.jpg"></div>
+            <div class="slide" onclick="viewFullImg('foto4.jpg')"><img src="foto4.jpg"></div>
+            <div class="slide" onclick="viewFullImg('foto5.jpg')"><img src="foto5.jpg"></div>
+            <div class="slide" onclick="viewFullImg('foto6.jpg')"><img src="foto6.jpg"></div>
+        </div>
+        <div class="slide-counter" id="counter">1 / 7</div>
+    </div>
+
+    <div class="product-meta">
+        <div class="product-price">Rp 50.000</div>
+        <h1 class="product-title">Catatan Tabungan Bareng Pasangan - Website Pencatat Otomatis (Premium Edition)</h1>
+    </div>
+
+    <div class="description-wrapper">
+        <h2 class="section-header">Deskripsi Produk</h2>
+        <div class="description-content">
+✨ Nabung Bareng Pasangan: Simpel, Aman & Otomatis ✨
+
+Ingin mulai menabung bersama pasangan dengan cara yang lebih praktis tapi tetap rapi? Website pribadi ini dirancang khusus untuk membantu kalian mencatat tabungan harian secara otomatis tanpa perlu ribet mengatur banyak menu.
+
+Cukup isi nominal dan alasan—baik itu setoran atau penarikan—maka progres tabungan langsung terhitung seketika. Cocok untuk kalian yang ingin fokus pada target masa depan tanpa pusing dengan hitungan manual. 💙
+
+🌟 KENAPA WEBSITE INI PILIHAN TERBAIKMU?
+🔐 Privasi Terjaga dengan PIN: Tidak perlu khawatir orang lain mengintip. Website ini dilindungi fitur PIN keamanan yang bisa kamu ganti sendiri melalui database atau pengaturan.
+
+🖼️ Custom Tampilan Sesukamu: Kamu bisa mengganti background website dengan foto kenangan atau gambar favorit hanya dengan memasukkan link foto.
+
+📩 Notifikasi Langsung ke Gmail: Dapatkan pemberitahuan otomatis ke email setiap kali kamu atau pasangan melakukan transaksi. Pantau tabungan jadi lebih transparan.
+
+🎯 Target Fleksibel: Kamu bebas mengatur sendiri Nama Tujuan (misal: Liburan atau Menikah), Nominal Target, hingga Tanggal Target yang diinginkan.
+
+☁️ Database Google Sheets: Data tersimpan aman di Google Sheets milikmu, mudah diakses dari HP maupun laptop kapan saja.
+
+✨ FITUR UNGGULAN
+✔ Tampilan Simpel & Clean: Desain minimalis yang memanjakan mata.
+✔ Rumus Otomatis: Saldo dan progres presentase terhitung otomatis tanpa salah hitung.
+✔ Riwayat Transaksi: Catatan harian yang tersusun rapi untuk evaluasi bulanan.
+✔ Akses Selamanya: Beli sekali, bebas pakai sepuasnya tanpa biaya bulanan.
+
+⚙️ CARA PENGGUNAAN
+Sangat mudah! Kamu tinggal pakai websitenya karena sistem sudah diatur semudah mungkin. Cukup masukkan PIN keamanan dan mulai catat perjalanan menabungmu.
+
+🎁 BONUS SPESIAL
+💙 Gratis revisi maksimal 3 kali untuk memastikan tampilan dan fungsi website sesuai dengan keinginanmu.
+
+Wujudkan impian bersama pasangan jadi lebih nyata. Yuk, mulai nabung lebih rapi sekarang!
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <a href="https://wa.me/6282220005648?text=Halo,%20saya%20ingin%20beli%20Catatan%20Tabungan%20Bareng%20Pasangan" class="buy-now-btn">
+            BUY NOW
+        </a>
+    </div>
+
+    <div class="lightbox" id="lightBox">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <img src="" id="fullImg">
+        <video id="fullVideo" controls playsinline>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        const slider = document.getElementById('mainSlider');
+        const counter = document.getElementById('counter');
+        const lightBox = document.getElementById('lightBox');
+        const fullImg = document.getElementById('fullImg');
+        const fullVideo = document.getElementById('fullVideo');
+        const totalSlides = 7;
+
+        // Indikator Slider
+        slider.addEventListener('scroll', () => {
+            const index = Math.round(slider.scrollLeft / slider.clientWidth) + 1;
+            counter.innerText = index + " / " + totalSlides;
+        });
+
+        // Fitur Fullscreen Foto
+        function viewFullImg(src) {
+            // Sembunyikan video, tampilkan foto
+            fullVideo.style.display = 'none';
+            fullVideo.pause(); // Pastikan video fullscreen mati
+            
+            fullImg.src = src;
+            fullImg.style.display = 'block';
+            lightBox.classList.add('show');
+        }
+
+        // Fitur Fullscreen Video
+        function viewFullVideo(src) {
+            // Sembunyikan foto, tampilkan video
+            fullImg.style.display = 'none';
+            
+            // Set sumber video dan putar
+            fullVideo.querySelector('source').src = src;
+            fullVideo.load(); // Reload source baru
+            fullVideo.style.display = 'block';
+            lightBox.classList.add('show');
+            fullVideo.play(); // Autoplay saat fullscreen
+        }
+
+        // Fungsi Tutup Lightbox (Matiin semua media)
+        function closeLightbox() {
+            lightBox.classList.remove('show');
+            fullVideo.pause(); // Matikan video fullscreen
+            fullVideo.currentTime = 0; // Reset waktu video
+        }
+
+        // Menutup jika mengeklik area hitam di luar media
+        lightBox.addEventListener('click', function(e) {
+            if (e.target === lightBox) {
+                closeLightbox();
+            }
+        });
+    </script>
+
+</body>
+</html>
