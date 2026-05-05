@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Tabungan Bareng Pasangan - Solusi Finansial Pasangan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #ff69b4;
+            --secondary: #00d2ff;
+            --accent: #ff0055;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --success: #4caf50;
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-gradient);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(45deg, #ff69b4, #00d2ff);
+            color: white;
+            border-radius: 0 0 80px 80px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        header h1 { margin: 0; font-size: 3.2rem; letter-spacing: 1.5px; text-shadow: 3px 3px 6px rgba(0,0,0,0.25); }
+        header p { opacity: 0.95; font-weight: 300; font-size: 1.3rem; margin-top: 15px; }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 80px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero { grid-template-columns: 1fr; text-align: center; }
+            header h1 { font-size: 2.2rem; }
+        }
+
+        .hero-image {
+            position: relative;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 50px;
+            border: 12px solid #2d3436;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+        }
+
+        .hero-content h2 { font-size: 2.5rem; line-height: 1.2; color: var(--dark); margin-bottom: 25px; }
+        .hero-content p { font-size: 1.15rem; color: #444; margin-bottom: 30px; }
+
+        .exclusive-badge {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 1px solid #ffe0b2;
+        }
+
+        .feature-card-main {
+            background: white;
+            padding: 40px;
+            border-radius: 35px;
+            border-right: 10px solid var(--secondary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .feature-card-main h3 { color: var(--accent); margin-top: 0; font-size: 1.6rem; }
+
+        .gallery-title { text-align: center; margin: 80px 0 40px; }
+        .gallery-title h2 { font-size: 2.4rem; color: var(--dark); position: relative; display: inline-block; }
+        .gallery-title h2::after { content: ''; width: 80px; height: 5px; background: var(--primary); position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-item {
+            background: white;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.07);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        .gallery-item:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(0,0,0,0.12); }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-item h4 { margin: 15px 0 8px; color: var(--dark); font-size: 1.2rem; font-weight: 700; }
+        .gallery-item p { font-size: 0.95rem; color: #666; margin: 0; padding-bottom: 15px; }
+
+        .cta-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d3436 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 30px;
+            border-radius: 50px;
+            margin: 100px 0;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        .cta-section h2 { font-size: 2.8rem; margin-bottom: 25px; color: var(--secondary); }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff69b4, #ff0055);
+            color: white;
+            padding: 22px 60px;
+            border-radius: 70px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.4rem;
+            box-shadow: 0 15px 30px rgba(255,105,180,0.4);
+            transition: 0.3s ease;
+        }
+
+        .btn:hover { transform: scale(1.08); box-shadow: 0 20px 40px rgba(255,105,180,0.6); }
+
+        footer { text-align: center; padding: 60px 20px; color: #999; font-size: 0.95rem; border-top: 1px solid #eee; }
+        
+        .floating-label {
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>Website Tabungan Kita</h1>
+        <p>Edisi Eksklusif: Pantau Impian Bersama dengan Sistem Otomatis Tercanggih</p>
+    </div>
+</header>
+
+<div class="container">
+    <section class="hero">
+        <div class="hero-image">
+            <img src="tampilanutama.jpg" alt="Dashboard Utama">
+        </div>
+        <div class="hero-content">
+            <div class="exclusive-badge">PREMIUM PRODUCT</div>
+            <h2>Kelola Keuangan Pasangan Tanpa Drama</h2>
+            <p>Tinggalkan pencatatan manual yang membosankan. Website ini menawarkan pengalaman menabung yang interaktif, transparan, dan penuh visualisasi data untuk memastikan setiap rupiah kalian terhitung dengan benar.</p>
+            
+            <div class="feature-card-main">
+                <div class="floating-label">EKSKLUSIF</div>
+                <h3>🔒 Personalisasi Nama Profesional</h3>
+                <p>Ingin website ini benar-benar mencerminkan identitas kalian? Cukup beri tahu kami nama pilihan Anda, dan <b>Developer kami akan menyematkan nama kalian secara permanen</b> ke dalam sistem. Sentuhan eksklusif yang membuat website ini terasa mewah dan resmi milik pribadi.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="gallery-title">
+        <h2>7 Keunggulan Dalam Satu Sistem</h2>
+    </div>
+
+    <section class="gallery-grid">
+        <div class="gallery-item">
+            <img src="tampilanutama.jpg" alt="Dashboard">
+            <h4>Dashboard Interaktif</h4>
+            <p>Visualisasi saldo real-time dengan progres bar tujuan dan grafik persentase kontribusi.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="setting.jpg" alt="Pengaturan">
+            <h4>Pusat Kendali Modern</h4>
+            <p>Atur nominal target, tanggal impian, keamanan PIN dan Background dalam satu pintu yang elegan.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="riwayat.jpg" alt="Riwayat">
+            <h4>Riwayat Transparan</h4>
+            <p>Setiap transaksi dicatat mendalam: Nama penginput, tanggal presisi, hingga alasan pengeluaran.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="forminput.jpg" alt="Input">
+            <h4>Antarmuka Input Cepat</h4>
+            <p>Desain form yang minimalis memudahkan Anda menambah atau menarik saldo dalam hitungan detik.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="notifmasuk.jpg" alt="Notif Masuk">
+            <h4>Smart Notification (Masuk)</h4>
+            <p>Dapatkan email konfirmasi otomatis setiap kali saldo bertambah. Menabung jadi lebih semangat!</p>
+        </div>
+        <div class="gallery-item">
+            <img src="notifkeluar.jpg" alt="Notif Keluar">
+            <h4>Smart Notification (Keluar)</h4>
+            <p>Keamanan ekstra dengan notifikasi email instan setiap kali ada penarikan dana dari tabungan.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="database.jpg" alt="Database">
+            <h4>Penyimpanan Cloud Aman</h4>
+            <p>Terintegrasi langsung dengan Google Sheets pribadi Anda. Data aman, rapi, dan bisa dicek kapan saja.</p>
+        </div>
+    </section>
+
+    <div class="cta-section">
+        <p style="text-transform: uppercase; letter-spacing: 4px; font-size: 1rem; color: var(--primary); font-weight: 700;">One-Time Purchase</p>
+        <h2>Wujudkan Impian Kalian Sekarang</h2>
+        <p style="margin-bottom: 50px; font-size: 1.2rem; opacity: 0.9; max-width: 700px; margin-left: auto; margin-right: auto;">Dapatkan Website Tabungan Kita dengan setup nama eksklusif dari developer. Jadikan perjalanan finansial kalian lebih rapi dan romantis.</p>
+        <a
+        href="https://wa.me/6282220005648?text=Halo%20saya%20mau%20tanya-tanya%2Fbeli%20soal%20website%20Tabungan%20bareng%20pasangan"
+        class="btn">Miliki Sekarang!</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Refki. Dirancang dengan cinta untuk pasangan modern.</p>
+    </footer>
+</div>
+
+</body>
+</html>
